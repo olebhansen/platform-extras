@@ -1,0 +1,39 @@
+# Master app-of-apps entry for demo-app. Admin's ArgoCD reaches this repo via the
+# single GitHub->Forgejo bridge (gitops/admin/apps/workloads-root.yaml in the
+# platform repo), which directory-recurses and applies each Application/
+# ApplicationSet found here.
+#
+# This ApplicationSet fans demo-app out to the test + prod clusters, each tracking
+# its own overlay in the demo-app-config repo. ArgoCD clones that Forgejo repo via
+# the forgejo-repo-creds credential (platform repo, secrets/admin/argocd).
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: demo-app
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - clusters:
+        selector:
+          matchExpressions:
+            - { key: env, operator: In, values: ["test", "prod"] }
+  template:
+    metadata:
+      name: '{{.name}}-demo-app'
+    spec:
+      project: default
+      source:
+        repoURL: https://forgejo.intern.eigro.com/gitadmin/demo-app-config.git
+        targetRevision: main
+        path: 'overlays/{{.name}}'
+      destination:
+        server: '{{.server}}'
+        namespace: demo-app
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
