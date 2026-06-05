@@ -8,6 +8,7 @@ Adding a workload = a Forgejo-only change: commit a new manifest here plus its
 `<app>` (code) and `<app>-config` (manifests) repos. The platform (GitHub) keeps
 just the one bridge.
 
-| File           | Workload                                               |
-|----------------|--------------------------------------------------------|
-| `demo-app.yaml`| demo-app → test + prod, sourced from `demo-app-config` |
+| File             | Workload                                                       |
+|------------------|---------------------------------------------------------------|
+| `demo-app.yaml`  | demo-app → test + prod, sourced from `demo-app-config`         |
+| `monitoring.yaml`| kube-prometheus-stack + loki + promtail → admin (observability)|
