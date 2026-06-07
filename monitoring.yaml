@@ -81,7 +81,7 @@ spec:
                 key: client-secret
           grafana.ini:
             server:
-              root_url: https://grafana.intern.eigro.com
+              root_url: https://grafana.admin.eigro.com
             auth:
               # Dex-only. Local admin form is off; re-enable in a crisis with
               # `scripts/breakglass.sh enable grafana` (sets GF_AUTH_DISABLE_LOGIN_FORM=false).
@@ -91,9 +91,9 @@ spec:
               name: Dex
               client_id: grafana
               scopes: "openid email profile groups"
-              auth_url: https://auth.intern.eigro.com/dex/auth
-              token_url: https://auth.intern.eigro.com/dex/token
-              api_url: https://auth.intern.eigro.com/dex/userinfo
+              auth_url: https://auth.admin.eigro.com/dex/auth
+              token_url: https://auth.admin.eigro.com/dex/token
+              api_url: https://auth.admin.eigro.com/dex/userinfo
               # Locked to one operator: only $SSO_ADMIN_EMAIL is granted a role
               # (GrafanaAdmin); strict mode denies anyone else who authenticates.
               role_attribute_strict: true
