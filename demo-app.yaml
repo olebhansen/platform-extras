@@ -24,7 +24,7 @@ spec:
     spec:
       project: default
       source:
-        repoURL: https://forgejo.admin.eigro.com/gitadmin/demo-app-config.git
+        repoURL: https://forgejo.admin.eigro.com/platform/demo-app-config.git
         targetRevision: main
         path: 'overlays/{{.name}}'
       destination:
