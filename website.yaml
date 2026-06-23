@@ -1,0 +1,38 @@
+# App-of-apps entry for website (olebhansen). Admin's ArgoCD reaches this repo
+# via the platform-extras-root bridge and applies each Application/ApplicationSet.
+#
+# Fans website out to the test cluster only (prod overlay isn't activated yet —
+# promote manually by adding "prod" here + pinning overlays/prod). Sourced from
+# the olebhansen/website-deployment config repo; the registry pull-secret is
+# SOPS-encrypted there and decrypted by admin ksops at sync.
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: website
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - clusters:
+        selector:
+          matchExpressions:
+            - { key: env, operator: In, values: ["test"] }
+  template:
+    metadata:
+      name: '{{.name}}-website'
+    spec:
+      project: default
+      source:
+        repoURL: https://forgejo.admin.eigro.com/olebhansen/website-deployment.git
+        targetRevision: main
+        path: 'overlays/{{.name}}'
+      destination:
+        server: '{{.server}}'
+        namespace: website
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true

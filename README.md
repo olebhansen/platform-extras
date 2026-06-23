@@ -12,3 +12,4 @@ just the one bridge.
 |------------------|---------------------------------------------------------------|
 | `demo-app.yaml`  | demo-app → test + prod, sourced from `demo-app-config`         |
 | `monitoring.yaml`| kube-prometheus-stack + loki + promtail → admin (observability)|
+| `website.yaml`   | website → test, sourced from `olebhansen/website-deployment`   |
