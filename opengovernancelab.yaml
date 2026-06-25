@@ -1,0 +1,25 @@
+# Legg denne i platform/platform-extras (delt repo — push selv) for å deploye.
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: opengovernancelab
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - clusters:
+        selector:
+          matchExpressions:
+            - { key: env, operator: In, values: ["test"] }
+  template:
+    metadata: { name: '{{.name}}-opengovernancelab' }
+    spec:
+      project: default
+      source:
+        repoURL: https://forgejo.admin.eigro.com/govtech/opengovernancelab-deployment.git
+        targetRevision: main
+        path: 'overlays/{{.name}}'
+      destination: { server: '{{.server}}', namespace: opengovernancelab }
+      syncPolicy:
+        automated: { prune: true, selfHeal: true }
+        syncOptions: [CreateNamespace=true, ServerSideApply=true]
